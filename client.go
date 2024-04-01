@@ -50,6 +50,8 @@ type APIClient struct {
 	JobApi *AiServiceJobApiService
 
 	AIGCApi *AigcImagesApiService
+
+	LLMApi *AiServiceLlmApiService
 }
 
 type service struct {
@@ -89,6 +91,7 @@ func NewClient(host, appId, token string) *APIClient {
 	c.JobApi = (*AiServiceJobApiService)(&c.common)
 	c.ImageTextApi = (*AiServiceImageTextApiService)(&c.common)
 	c.AIGCApi = (*AigcImagesApiService)(&c.common)
+	c.LLMApi = (*AiServiceLlmApiService)(&c.common)
 	return c
 }
 
