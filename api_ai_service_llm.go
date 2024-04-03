@@ -30,7 +30,7 @@ type ChatCompletionMessage struct {
 	Content string
 }
 
-func (a *AiServiceLlmApiService) LlmEvalJudger(request ChatCompletionRequest, modelName string) (*model.Response, error) {
+func (a *AiServiceLlmApiService) LlmEvalJudger(request ChatCompletionRequest, modelName string) (*model.LLMEvalJudgerResponse, error) {
 	evalRequest := model.LlmEvalJudgerRequest{
 		Action:    "LLMEvalJudger",
 		ModelName: modelName,
@@ -64,13 +64,13 @@ AiServiceLlmApiService 裁判员模型服务
 
 @return Response
 */
-func (a *AiServiceLlmApiService) LlmEvalJudgerPost(ctx context.Context, body model.LlmEvalJudgerRequest) (*model.Response, *http.Response, error) {
+func (a *AiServiceLlmApiService) LlmEvalJudgerPost(ctx context.Context, body model.LlmEvalJudgerRequest) (*model.LLMEvalJudgerResponse, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}
 		localVarFileName    string
 		localVarFileBytes   []byte
-		localVarReturnValue = model.NewResponse()
+		localVarReturnValue = model.NewLLMEvalJudgerResponse()
 	)
 
 	path := "/api/v1/llm/eval_judger"
