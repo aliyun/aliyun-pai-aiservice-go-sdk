@@ -26,8 +26,9 @@ type ChatCompletionRequest struct {
 }
 
 type ChatCompletionMessage struct {
-	Role    string
-	Content string
+	Role         string
+	Content      string
+	MultiContent []model.ChatMessagePart
 }
 
 func (a *AiServiceLlmApiService) LlmEvalJudger(request ChatCompletionRequest, modelName string) (*model.LLMEvalJudgerResponse, error) {
@@ -39,8 +40,9 @@ func (a *AiServiceLlmApiService) LlmEvalJudger(request ChatCompletionRequest, mo
 
 	for _, message := range request.Messages {
 		evalRequest.Messages = append(evalRequest.Messages, model.LlmEvalJudgerRequestMessages{
-			Role:    message.Role,
-			Content: message.Content,
+			Role:         message.Role,
+			Content:      message.Content,
+			MultiContent: message.MultiContent,
 		})
 	}
 
