@@ -67,7 +67,7 @@ func (m LlmEvalJudgerRequestMessages) MarshalJSON() ([]byte, error) {
 					return nil, ErrAnswerFieldsMissing
 				} else if m.MultiContent[i].Json.Answer1 == "" {
 					return nil, ErrAnswer1FieldsMissing
-				} else {
+				} else if m.MultiContent[i].Json.Answer2 == "" {
 					return nil, ErrAnswer2FieldsMissing
 				}
 			}
