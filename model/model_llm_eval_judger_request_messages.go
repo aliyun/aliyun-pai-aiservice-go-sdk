@@ -47,7 +47,7 @@ type ChatMessagePart struct {
 
 type LlmEvalJudgerRequestMessages struct {
 	Role         string `json:"role,omitempty"`
-	Content      string `json:"content,omitempty"`
+	Content      any    `json:"content,omitempty"`
 	MultiContent []ChatMessagePart
 }
 
@@ -83,14 +83,14 @@ func (m LlmEvalJudgerRequestMessages) MarshalJSON() ([]byte, error) {
 
 		msg := struct {
 			Role         string            `json:"role"`
-			Content      string            `json:"-"`
+			Content      any               `json:"-"`
 			MultiContent []ChatMessagePart `json:"content,omitempty"`
 		}(m)
 		return json.Marshal(msg)
 	}
 	msg := struct {
 		Role         string            `json:"role"`
-		Content      string            `json:"content"`
+		Content      any               `json:"content"`
 		MultiContent []ChatMessagePart `json:"-"`
 	}(m)
 	return json.Marshal(msg)
@@ -99,7 +99,7 @@ func (m LlmEvalJudgerRequestMessages) MarshalJSON() ([]byte, error) {
 func (m *LlmEvalJudgerRequestMessages) UnmarshalJSON(bs []byte) error {
 	msg := struct {
 		Role         string `json:"role"`
-		Content      string `json:"content"`
+		Content      any    `json:"content"`
 		MultiContent []ChatMessagePart
 	}{}
 	if err := json.Unmarshal(bs, &msg); err == nil {
@@ -108,7 +108,7 @@ func (m *LlmEvalJudgerRequestMessages) UnmarshalJSON(bs []byte) error {
 	}
 	multiMsg := struct {
 		Role         string `json:"role"`
-		Content      string
+		Content      any
 		MultiContent []ChatMessagePart `json:"content"`
 	}{}
 	if err := json.Unmarshal(bs, &multiMsg); err != nil {

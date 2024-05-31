@@ -2,6 +2,7 @@ package aiservice
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -20,7 +21,12 @@ var (
 
 type AiServiceLlmApiService service
 
-func (a *AiServiceLlmApiService) Create(modelName string, model string, messages []aimodel.LlmEvalJudgerRequestMessages) (*aimodel.Response, error) {
+func (a *AiServiceLlmApiService) Create(modelName string, model string, juderRequestBody string) (*aimodel.Response, error) {
+	var messages []aimodel.LlmEvalJudgerRequestMessages
+	if err := json.Unmarshal([]byte(juderRequestBody), &messages); err != nil {
+		return nil, err
+	}
+
 	request := &aimodel.LlmEvalJudgerRequest{
 		Action:    "LLMEvalJudger",
 		ModelName: modelName,
