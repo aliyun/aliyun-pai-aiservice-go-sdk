@@ -21,17 +21,20 @@ var (
 
 type AiServiceLlmApiService service
 
-func (a *AiServiceLlmApiService) Create(modelName string, model string, juderRequestBody string) (*aimodel.LLMEvalJudgerResponse, error) {
-	var messages []aimodel.LlmEvalJudgerRequestMessages
-	if err := json.Unmarshal([]byte(juderRequestBody), &messages); err != nil {
-		return nil, err
+func (a *AiServiceLlmApiService) Create(model string, messages string) (*aimodel.LLMEvalJudgerResponse, error) {
+	return a.CreateWithModelName(model, messages, "")
+}
+func (a *AiServiceLlmApiService) CreateWithModelName(model string, messages string, modelName string) (*aimodel.LLMEvalJudgerResponse, error) {
+	var messageList []aimodel.LlmEvalJudgerRequestMessages
+	if err := json.Unmarshal([]byte(messages), &messageList); err != nil {
+		return nil, fmt.Errorf("messages is not valid json, %v", err)
 	}
 
 	request := &aimodel.LlmEvalJudgerRequest{
 		Action:    "LLMEvalJudger",
-		ModelName: modelName,
 		Model:     model,
-		Messages:  messages,
+		Messages:  messageList,
+		ModelName: modelName,
 	}
 
 	response, httpResponse, err := a.LlmEvalJudgerPost(context.Background(), request)
