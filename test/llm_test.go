@@ -36,4 +36,9 @@ func TestLLMEvalJudger2(t *testing.T) {
 		t.Errorf("response error:%v", response)
 	}
 	t.Log(response)
+
+	t.Log(response.Data.Model, response.Data.Id)
+	for _, choice := range response.Data.Choices {
+		t.Log(choice.Index, choice.Text)
+	}
 }

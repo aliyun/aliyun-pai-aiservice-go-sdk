@@ -21,7 +21,7 @@ var (
 
 type AiServiceLlmApiService service
 
-func (a *AiServiceLlmApiService) Create(modelName string, model string, juderRequestBody string) (*aimodel.Response, error) {
+func (a *AiServiceLlmApiService) Create(modelName string, model string, juderRequestBody string) (*aimodel.LLMEvalJudgerResponse, error) {
 	var messages []aimodel.LlmEvalJudgerRequestMessages
 	if err := json.Unmarshal([]byte(juderRequestBody), &messages); err != nil {
 		return nil, err
@@ -54,13 +54,13 @@ AiServiceLlmApiService 裁判员模型服务
 
 @return Response
 */
-func (a *AiServiceLlmApiService) LlmEvalJudgerPost(ctx context.Context, body *aimodel.LlmEvalJudgerRequest) (*aimodel.Response, *http.Response, error) {
+func (a *AiServiceLlmApiService) LlmEvalJudgerPost(ctx context.Context, body *aimodel.LlmEvalJudgerRequest) (*aimodel.LLMEvalJudgerResponse, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}
 		localVarFileName    string
 		localVarFileBytes   []byte
-		localVarReturnValue = aimodel.NewResponse()
+		localVarReturnValue = aimodel.NewLLMEvalJudgerResponse()
 	)
 
 	path := "/api/v1/llm/eval_judger"
