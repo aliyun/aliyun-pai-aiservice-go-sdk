@@ -2,6 +2,7 @@ package aiservice
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -10,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aliyun/aliyun-pai-aiservice-go-sdk/model"
+	aimodel "github.com/aliyun/aliyun-pai-aiservice-go-sdk/model"
 )
 
 // Linger please
@@ -20,33 +21,20 @@ var (
 
 type AiServiceLlmApiService service
 
-type ChatCompletionRequest struct {
-	Model    string
-	Messages []ChatCompletionMessage
-}
+func (a *AiServiceLlmApiService) Create(modelName string, model string, juderRequestBody string) (*aimodel.LLMEvalJudgerResponse, error) {
+	var messages []aimodel.LlmEvalJudgerRequestMessages
+	if err := json.Unmarshal([]byte(juderRequestBody), &messages); err != nil {
+		return nil, err
+	}
 
-type ChatCompletionMessage struct {
-	Role         string
-	Content      string
-	MultiContent []model.ChatMessagePart
-}
-
-func (a *AiServiceLlmApiService) LlmEvalJudger(request ChatCompletionRequest, modelName string) (*model.LLMEvalJudgerResponse, error) {
-	evalRequest := model.LlmEvalJudgerRequest{
+	request := &aimodel.LlmEvalJudgerRequest{
 		Action:    "LLMEvalJudger",
 		ModelName: modelName,
-		Model:     request.Model,
+		Model:     model,
+		Messages:  messages,
 	}
 
-	for _, message := range request.Messages {
-		evalRequest.Messages = append(evalRequest.Messages, model.LlmEvalJudgerRequestMessages{
-			Role:         message.Role,
-			Content:      message.Content,
-			MultiContent: message.MultiContent,
-		})
-	}
-
-	response, httpResponse, err := a.LlmEvalJudgerPost(context.Background(), evalRequest)
+	response, httpResponse, err := a.LlmEvalJudgerPost(context.Background(), request)
 	if err != nil {
 		return response, err
 	}
@@ -66,13 +54,13 @@ AiServiceLlmApiService 裁判员模型服务
 
 @return Response
 */
-func (a *AiServiceLlmApiService) LlmEvalJudgerPost(ctx context.Context, body model.LlmEvalJudgerRequest) (*model.LLMEvalJudgerResponse, *http.Response, error) {
+func (a *AiServiceLlmApiService) LlmEvalJudgerPost(ctx context.Context, body *aimodel.LlmEvalJudgerRequest) (*aimodel.LLMEvalJudgerResponse, *http.Response, error) {
 	var (
 		localVarHttpMethod  = strings.ToUpper("Post")
 		localVarPostBody    interface{}
 		localVarFileName    string
 		localVarFileBytes   []byte
-		localVarReturnValue = model.NewLLMEvalJudgerResponse()
+		localVarReturnValue = aimodel.NewLLMEvalJudgerResponse()
 	)
 
 	path := "/api/v1/llm/eval_judger"
